@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "broisol",
-    "slug": "broisol",
+    "name": "organizen",
+    "slug": "organizen",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon2.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon2.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,9 +21,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon2.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.carlos141.organizen"
     },
     "web": {
       "favicon": "./assets/favicon.png"
