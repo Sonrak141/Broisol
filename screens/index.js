@@ -10,6 +10,7 @@ import {createStackNavigator} from '@react-navigation/stack'
 import Home from '../screens/Home'
 import Signup from '../screens/SignUp'
 import Login from '../screens/Login'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
 const Stack = createStackNavigator();
@@ -25,8 +26,18 @@ export default function Index() {
         {userLogin
           ?
           <Tab.Navigator>
-            <Tab.Screen name="Tasks" component={TaskNavigator} options={{headerShown:false}}/>
-            <Tab.Screen name="Profile" component={User} options={{headerShown:false}} />
+            <Tab.Screen name="Tasks" component={TaskNavigator} options={{
+              headerShown:false,
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="home" color={color} size={size} />
+              ),
+              }}/>
+            <Tab.Screen name="Profile" component={User} options={{
+              headerShown:false,
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="account" color={color} size={size} />
+              ),
+              }} />
           </Tab.Navigator>
         
         : 

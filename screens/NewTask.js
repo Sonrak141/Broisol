@@ -1,13 +1,18 @@
 import React,{useState} from 'react'
-import { View, Text, TextInput, StyleSheet, Button, TouchableOpacity} from 'react-native'
+import { View, Text, TextInput, StyleSheet, Button, TouchableOpacity, Image, Alert} from 'react-native'
 import {db} from '../constants/db.js'
 import {Provider, useSelector} from 'react-redux'
+import * as ImagePicker from 'expo-image-picker'
+import * as FileSystem from 'expo-file-system';
+
 
 const NewTask = () => {
 
 const [textInput, settextInput] = useState('')
 const [task, settask] = useState('')
+const [imageUri, setimageUri] = useState()
 const userLogin = useSelector(state => state.auth.userId)
+
 
     const handleOnChange = (t) => {
         settextInput(t)
@@ -17,11 +22,40 @@ const userLogin = useSelector(state => state.auth.userId)
         let object = {
             nombre: textInput,
             user: userLogin,
+            imagen: imageUri,
         }
         db.collection('tasks').add(object)
         settextInput('')
+        setimageUri()
         
         }
+    const verifyCamera = async () => {
+        const {status} = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted'){
+            Alert.alert(
+                'Need camera permissions'
+                [{text:'Ok'}]
+                )
+            return false;    
+        }else{
+            return true;
+        }
+    }     
+    const handleOnClickImage = async () => {
+        const isCameraOk = await verifyCamera();
+        if(!isCameraOk) return;
+
+        const image = await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect:[16,9],
+            quality: 1
+        })
+
+        
+        console.log(image)
+        setimageUri(image)
+
+    }
     return (
         <View style={styles.container}>
             <Text style={styles.textTitle}>New Task</Text>
@@ -32,8 +66,16 @@ const userLogin = useSelector(state => state.auth.userId)
             onChangeText={handleOnChange}
             value={textInput}
         />
+        <View style={styles.imageContainer}>
+            {!imageUri
+            ? <Text>No ha seleccionado imagen</Text>
+            : <Image style={styles.image} source={{uri: imageUri.uri}}/>}
+        </View>
+        <TouchableOpacity onPress={handleOnClickImage} style={styles.btn}>
+            <Text style={styles.text}>Add Image</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={handleOnClick} style={styles.btn}>
-            <Text style={styles.text}>Add new text</Text>
+            <Text style={styles.text}>Add new task</Text>
         </TouchableOpacity>
         
         </View>
@@ -84,6 +126,15 @@ const styles = StyleSheet.create({
     
     
 },
+image: {
+    height:'50%',
+    width:'50%',
+    marginHorizontal:80
+},
+imageContainer: {
+    alignContent: "center",
+    justifyContent: "center"
+}
   
 });
 

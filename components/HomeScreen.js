@@ -6,15 +6,22 @@ import AppLoading from 'expo-app-loading'
 const HomeScreen = ({navigation}) => {
 
   
+    const [dataLoaded] = useFonts({
+        'open-sans': require('../assets/fonts/OpenSans-Regular.ttf'),
+        'open-sans-bold': require('../assets/fonts/OpenSans-ExtraBold.ttf'),
+      })
     
+      if (!dataLoaded) {
+        return <AppLoading />
+      }
      
       
     
         return (
             <View style={styles.homeContainer}>
-                
+                <ImageBackground source={require('../assets/images/homeBG.jpeg')} resizeMode="cover" style={styles.image}>
                 <Text style={styles.text}> OrganiZen </Text>
-                
+                <Image source={require('../assets/images/logo.png')}/>
                 <TouchableOpacity onPress={()=>navigation.navigate('Login')} style={styles.btn}>
                     <Text style={styles.btnText}>Log In</Text>
                 </TouchableOpacity>
@@ -22,7 +29,7 @@ const HomeScreen = ({navigation}) => {
                     <Text style={styles.btnText}>Sign Up</Text>
                 </TouchableOpacity>
                
-               
+                </ImageBackground>
             </View>
         )
     
@@ -40,7 +47,7 @@ const styles = StyleSheet.create({
     text:{
         color: '#FAFFF5',
         fontSize:50,
-    
+        fontFamily: 'open-sans-bold',
         textAlign: 'center'
     },
     btn:{
@@ -56,7 +63,8 @@ const styles = StyleSheet.create({
     btnText:{
         fontSize:25,
         color: '#656565',
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'open-sans-bold',
     },
     image: {
         flex: 1,

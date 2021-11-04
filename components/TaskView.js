@@ -1,14 +1,20 @@
 import React, {useEffect, useState} from 'react'
-import { View, Text, SafeAreaView, StyleSheet, FlatList,TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, StyleSheet, FlatList,TouchableOpacity, Image } from 'react-native'
 import{db} from '../constants/db';
 import Task from './Task.js';
 import {Provider, useSelector} from 'react-redux'
+import { useFonts} from 'expo-font';
+import AppLoading from 'expo-app-loading'
 
 const TaskView = ({navigation}) => {
 const [DATA, setDATA] = useState([])
 const userLogin = useSelector(state => state.auth.userId)
 
+
+
 const getTask =  ()=>{
+
+  
     const docs = [];
     db.collection('tasks').onSnapshot((querySnapshot) =>{
         querySnapshot.forEach((doc) => {
@@ -29,10 +35,19 @@ const getTask =  ()=>{
     
     const renderItem = ({ item }) => (
         <View style={styles.item}>
-        <Text>{item.nombre}</Text>
-        <Text>{item.id}</Text>
+        <Text style={styles.itemText}>Task: {item.nombre}</Text>
+        <Image style={styles.image} source={item.imagen}/>
         </View>
       );
+
+      const [dataLoaded] = useFonts({
+        'open-sans': require('../assets/fonts/OpenSans-Regular.ttf'),
+        'open-sans-bold': require('../assets/fonts/OpenSans-ExtraBold.ttf'),
+      })
+      
+      if (!dataLoaded) {
+        return <AppLoading />
+      }
     return(
         <View style={styles.container}>
         <FlatList
@@ -67,6 +82,7 @@ const getTask =  ()=>{
           marginHorizontal:10,
           borderRadius:20,
           shadowColor: "#000",
+          maxHeight:200
         },
         title: {
           fontSize: 32,
@@ -78,7 +94,14 @@ const getTask =  ()=>{
           paddingHorizontal:20,
           paddingVertical:10,
           borderRadius:10
-      }
+      },image: {
+        height:'70%',
+        width:'50%',
+        marginHorizontal:80
+    },
+    itemText:{
+      fontFamily: 'open-sans-bold',
+    }
       });
 export default TaskView
 
